@@ -1,0 +1,73 @@
+# Build artifacts
+*.o
+*.obj
+example12
+example12_irradiance
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Visual Studio files
+*.sln
+*.vcxproj
+*.vcxproj.user
+*.suo
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+*.opensdf
+*.unsuccessfulbuild
+
+# Compiled binaries
+bin/
+obj/
+Debug/
+Release/
+x64/
+x86/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Don't ignore source files, shaders, or assets
+!*.cpp
+!*.cc
+!*.h
+!*.fs
+!*.vs
+!*.obj
+!*.jpg
+!*.png
+!*.md
+
