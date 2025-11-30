@@ -1,5 +1,5 @@
 /*
- *  Fragment shader for Assignment 3 - Part 2
+ *  Fragment shader for Assignment 3 - Part 2a
  *  Diffuse Reflection using Irradiance Map
  */
 

@@ -1,5 +1,5 @@
 /*
- *  Fragment shader for Assignment 3 - Part 3
+ *  Fragment shader for Assignment 3 - Part 2b
  *  Diffuse Reflection using Monte Carlo sampling in shader
  */
 
@@ -83,18 +83,22 @@ void main() {
 	
 	// Sample the hemisphere above the surface
 	for (i = 0; i < numSamples; i++) {
-		// Generate random direction in hemisphere
+		// Generate random direction
 		sampleDir = randomHemisphereDirection(N);
 		
 		// Weight by cosine of angle (dot product)
 		weight = dot(sampleDir, N);
 		
-		// Sample environment map
-		sampleColor = texture(tex, sampleDir);
-		
-		// Accumulate weighted color
-		weightedSum += sampleColor * weight;
-		weightSum += weight;
+		// Make sure we're sampling the hemisphere above the surface
+		// (dot product should be positive)
+		if (weight > 0.0) {
+			// Sample environment map
+			sampleColor = texture(tex, sampleDir);
+			
+			// Accumulate weighted color
+			weightedSum += sampleColor * weight;
+			weightSum += weight;
+		}
 	}
 	
 	// Divide by sum of weights to get weighted average

@@ -1,14 +1,12 @@
-# Portable Makefile for Assignment 3
-# Works on macOS, Linux, and potentially Windows (with adjustments)
-
-TARGET=example12
+# Makefile for Assignment 3 - Global Illumination
+# Works on macOS, Linux, and Windows
 
 # Detect operating system
 UNAME_S := $(shell uname -s 2>/dev/null || echo "Unknown")
 
 # Set platform-specific flags
 ifeq ($(UNAME_S),Darwin)
-	# macOS - Try to find libraries
+	# macOS
 	BREW_PREFIX := $(shell brew --prefix 2>/dev/null || echo "/usr/local")
 	CXXFLAGS = -I$(BREW_PREFIX)/include -I/usr/local/include -I/opt/homebrew/include
 	LDFLAGS = -L$(BREW_PREFIX)/lib -L/usr/local/lib -L/opt/homebrew/lib
@@ -19,41 +17,27 @@ else ifeq ($(UNAME_S),Linux)
 	LDFLAGS = $(shell pkg-config --libs-only-L glfw3 2>/dev/null || echo "")
 	LIBS = -lfreeimage $(shell pkg-config --libs glfw3 2>/dev/null || echo "-lglfw") -lGLEW -lGLU -lGL -lm
 else
-	# Default/Windows (adjust as needed)
+	# Windows
 	CXXFLAGS = 
 	LDFLAGS = 
 	LIBS = -lfreeimage -lglfw3 -lglew32 -lopengl32 -lm
 endif
 
-# Source files
-SOURCES = viewer.cpp Shaders.cpp tiny_obj_loader.cc texture.cpp
-OBJECTS = $(SOURCES:.cpp=.o)
-OBJECTS := $(OBJECTS:.cc=.o)
+# Common source files
+COMMON_SOURCES = Shaders.cpp tiny_obj_loader.cc texture.cpp
+COMMON_OBJECTS = $(COMMON_SOURCES:.cpp=.o)
+COMMON_OBJECTS := $(COMMON_OBJECTS:.cc=.o)
 
-# Default target with dependency check
-$(TARGET): check-deps $(OBJECTS)
-	@echo "Linking..."
-	$(CXX) -o $(TARGET) $(OBJECTS) $(LDFLAGS) $(LIBS)
-	@echo ""
-	@echo "✅ Build successful! Run with: ./example12 a b"
+# Targets
+all: example12 example12_irradiance
 
-# Check dependencies before building
-check-deps:
-	@echo "Checking dependencies..."
-	@if [ "$(UNAME_S)" = "Darwin" ]; then \
-		BREW_PREFIX=$$(brew --prefix 2>/dev/null || echo "/usr/local"); \
-		if [ ! -f "$$BREW_PREFIX/include/GLFW/glfw3.h" ] && [ ! -f "/opt/homebrew/include/GLFW/glfw3.h" ] && [ ! -f "/usr/local/include/GLFW/glfw3.h" ]; then \
-			echo ""; \
-			echo "❌ ERROR: GLFW not found!"; \
-			echo ""; \
-			echo "Install dependencies with:"; \
-			echo "  brew install freeimage glfw glew"; \
-			echo ""; \
-			echo "Or check if installed: ./check_dependencies.sh"; \
-			echo ""; \
-			exit 1; \
-		fi; \
-	fi
+# Main viewer (for Part 1 and Part 3)
+example12: viewer.o $(COMMON_OBJECTS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
+
+# Irradiance viewer (for Part 2)
+example12_irradiance: viewer_irradiance.o $(COMMON_OBJECTS)
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 # Compile object files
 %.o: %.cpp
@@ -64,10 +48,11 @@ check-deps:
 
 # Dependencies
 viewer.o: Shaders.h
+viewer_irradiance.o: Shaders.h
 Shaders.o: Shaders.h
 texture.o: texture.h
 
 clean:
-	rm -f $(TARGET) $(OBJECTS)
+	rm -f example12 example12_irradiance *.o
 
-.PHONY: clean check-deps
+.PHONY: all clean
