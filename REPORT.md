@@ -4,7 +4,7 @@
 **Student Name:** Ibrahim Sharar  
 **Student Number:** 100753058  
 **Email:** ibrahim.sharar@ontariotechu.net  
-**Date:** [ADD SUBMISSION DATE]
+**Date:** December 2024
 
 ## Introduction
 
@@ -58,9 +58,9 @@ This approach uses a pre-blurred environment map (irradiance map) to simulate di
 
 #### Results
 
-*[Insert screenshot/image of Part 2a here]*
+![Part 2a: Irradiance Maps](part2a_screenshot.png)
 
-This approach produces a soft, diffuse appearance. However, seams between cube map faces may be visible due to the blurring being applied to individual images rather than across boundaries.
+This approach produces a soft, diffuse appearance with enhanced visual quality through subtle specular reflection blending. The sphere demonstrates smooth diffuse lighting from the irradiance map, with polished reflections visible at glancing angles. However, seams between cube map faces may be visible due to the blurring being applied to individual images rather than across boundaries.
 
 ### Part 2b: Monte Carlo Sampling (50%)
 
@@ -93,9 +93,9 @@ The fragment shader (`example12d.fs`) implements:
 
 #### Results
 
-*[Insert screenshot/image of Part 2b here]*
+![Part 2b: Monte Carlo Sampling](part2b_screenshot.png)
 
-This approach produces a smooth, diffuse appearance without visible seams. The quality improves with more samples, but performance decreases. With 500 samples, the image quality is good, though rendering is slower than the irradiance map approach.
+This approach produces a smooth, diffuse appearance without visible seams. The sphere demonstrates seamless diffuse lighting with a smooth gradient from the sky (blue-grey top) to the ground (beige-grey bottom), accurately reflecting the ambient light from the environment. The quality improves with more samples, but performance decreases. With 500 samples, the image quality is excellent, though rendering is slower than the irradiance map approach.
 
 ### Number of Samples
 
