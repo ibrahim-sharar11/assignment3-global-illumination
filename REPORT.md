@@ -36,9 +36,9 @@ The fragment shader (`example12b.fs`) implements the following:
 
 ### Results
 
-*[Insert screenshot/image of Part 1 here]*
+![Part 1: Reflection and Refraction](part1_screenshot.png)
 
-The implementation produces a glass-like sphere that shows both reflection and refraction. The Fresnel effect is visible: more reflection occurs at glancing angles, while more refraction occurs when viewing perpendicular to the surface.
+The implementation produces a glass-like sphere that shows both reflection and refraction. The Fresnel effect is visible: more reflection occurs at glancing angles, while more refraction occurs when viewing perpendicular to the surface. The sphere clearly demonstrates the distorted, inverted view of the environment through refraction, while also reflecting the surrounding buildings and sky on its surface.
 
 ## Part 2: Diffuse Reflection
 
@@ -50,7 +50,11 @@ This approach uses a pre-blurred environment map (irradiance map) to simulate di
 
 1. Uses a blurred version of the environment map (resized from 2048x2048 to 512x512 and blurred)
 2. Samples the irradiance map using the surface normal vector directly
-3. The shader (`example12c.fs`) simply performs: `texture(irradianceMap, N)`
+3. The shader (`example12c.fs`) blends the irradiance map with a subtle specular reflection component:
+   - Primary diffuse: samples `irradianceMap` using the normal vector
+   - Subtle reflection: samples the environment map using the reflection vector
+   - Fresnel blending: mixes between diffuse and reflection based on viewing angle
+   - Enhanced with tone mapping, gamma correction, and brightness/contrast adjustments
 
 #### Results
 
