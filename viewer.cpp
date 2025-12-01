@@ -259,7 +259,7 @@ void framebufferSizeCallback(GLFWwindow *window, int w, int h) {
 
 	glViewport(0, 0, w, h);
 
-	projection = glm::perspective(0.7f, ratio, 1.0f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), ratio, 0.1f, 100.0f);
 
 }
 
@@ -277,7 +277,7 @@ void display(void) {
 
 	view = glm::lookAt(glm::vec3(eyex, eyey, eyez),
 		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 0.0f, 1.0f));
+		glm::vec3(0.0f, 1.0f, 0.0f));
 
 	/*
 	 *  start by displaying the background cube
@@ -388,7 +388,7 @@ int main(int argc, char **argv) {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glViewport(0, 0, 512, 512);
 
-	projection = glm::perspective(0.7f, 1.0f, 1.0f, 200.0f);
+	projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
 
 	/*
 	 *  there are two programs, one for the background
@@ -406,13 +406,14 @@ int main(int argc, char **argv) {
 	init();
 	background();
 
-	eyex = 0.0;
-	eyez = 0.0;
-	eyey = 5.0;
-
-	theta = 1.5;
-	phi = 1.5;
+	// Better initial camera position - looking at sphere from nice angle
 	r = 5.0;
+	theta = M_PI / 3.0;  // 60 degrees down from top
+	phi = M_PI / 4.0;    // 45 degrees around
+	
+	eyex = (float)(r * sin(theta) * cos(phi));
+	eyey = (float)(r * sin(theta) * sin(phi));
+	eyez = (float)(r * cos(theta));
 
 	glfwSwapInterval(1);
 
