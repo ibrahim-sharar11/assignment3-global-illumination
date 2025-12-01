@@ -259,7 +259,7 @@ void framebufferSizeCallback(GLFWwindow *window, int w, int h) {
 
 	glViewport(0, 0, w, h);
 
-	projection = glm::perspective(glm::radians(45.0f), ratio, 0.1f, 100.0f);
+	projection = glm::perspective(0.7f, ratio, 1.0f, 100.0f);
 
 }
 
@@ -298,12 +298,8 @@ void display(void) {
 	/*
 	 *  now display the sphere
 	 */
-	// Create model matrix to scale sphere to nice size (2.0 units)
-	glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
-	glm::mat4 modelView = view * model;
-	
 	viewLoc = glGetUniformLocation(program, "modelView");
-	glUniformMatrix4fv(viewLoc, 1, 0, glm::value_ptr(modelView));
+	glUniformMatrix4fv(viewLoc, 1, 0, glm::value_ptr(view));
 	projLoc = glGetUniformLocation(program, "projection");
 	glUniformMatrix4fv(projLoc, 1, 0, glm::value_ptr(projection));
 
@@ -392,7 +388,7 @@ int main(int argc, char **argv) {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glViewport(0, 0, 512, 512);
 
-	projection = glm::perspective(glm::radians(45.0f), 1.0f, 0.1f, 100.0f);
+	projection = glm::perspective(0.7f, 1.0f, 1.0f, 200.0f);
 
 	/*
 	 *  there are two programs, one for the background
