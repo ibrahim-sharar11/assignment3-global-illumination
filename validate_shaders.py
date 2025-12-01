@@ -61,9 +61,7 @@ def check_shader_file(filename):
         if func + '(' not in content and func + ' (' not in content:
             if 'refract' in func and 'b' in filename:  # Part 1 needs refract
                 errors.append(f"Missing {desc}")
-            elif func == 'reflect' and 'b' in filename:  # Only Part 1 needs reflect
-                errors.append(f"Missing {desc}")
-            elif func in ['texture', 'normalize']:  # All shaders need these
+            elif func in ['reflect', 'texture', 'normalize']:
                 errors.append(f"Missing {desc}")
     
     # Part 1 specific checks
@@ -71,7 +69,7 @@ def check_shader_file(filename):
         if 'refract' not in content:
             errors.append("Part 1 shader missing refract() function")
         if 'Schlick' in content or 'R0' in content or 'F' in content:
-            print("  OK: Schlick approximation code detected")
+            print("  ✓ Schlick approximation code detected")
         else:
             warnings.append("Schlick approximation might be missing")
     
@@ -80,7 +78,7 @@ def check_shader_file(filename):
         if 'rand()' not in content:
             errors.append("Part 3 shader missing random number generator")
         if 'numSamples' in content or 'samples' in content.lower():
-            print("  OK: Sampling loop detected")
+            print("  ✓ Sampling loop detected")
         else:
             warnings.append("Sampling loop might be missing")
     
@@ -96,34 +94,30 @@ def check_shader_file(filename):
         if stripped.startswith('//') or stripped.startswith('/*') or not stripped:
             continue
         # Check if line should end with semicolon (simple heuristic)
-        # Skip lines that already end with semicolon or are control structures
         if stripped and not stripped.endswith(';') and not stripped.endswith('{') and not stripped.endswith('}'):
             if 'for' not in stripped and 'if' not in stripped and 'while' not in stripped:
-                # Only check if line has assignment or return AND doesn't already have semicolon
-                if ('=' in stripped or 'return' in stripped) and ';' not in stripped:
-                    # Additional check: skip if it's a function definition or comment continuation
-                    if not ('(' in stripped and ')' in stripped and '{' not in stripped) and not stripped.startswith('//'):
-                        warnings.append(f"Line {i} might be missing semicolon: {stripped[:50]}")
+                if '=' in stripped or 'return' in stripped:
+                    warnings.append(f"Line {i} might be missing semicolon: {stripped[:50]}")
     
     # Print results
-    print(f"\nValidating: {filename}")
+    print(f"\n📋 Validating: {filename}")
     print("=" * 60)
     
     if errors:
-        print(f"ERRORS found ({len(errors)}):")
+        print(f"❌ ERRORS found ({len(errors)}):")
         for error in errors:
-            print(f"   - {error}")
+            print(f"   • {error}")
     
     if warnings:
-        print(f"WARNINGS ({len(warnings)}):")
+        print(f"⚠️  WARNINGS ({len(warnings)}):")
         for warning in warnings:
-            print(f"   - {warning}")
+            print(f"   • {warning}")
     
     if not errors and not warnings:
-        print("OK: No obvious syntax errors found!")
+        print("✅ No obvious syntax errors found!")
     
     # Additional validation
-    print("\nStructure Analysis:")
+    print("\n📊 Structure Analysis:")
     code_lines = [l for l in lines if l.strip() and not l.strip().startswith('//')]
     func_pattern = r'\w+\s+\w+\s*\([^)]*\)\s*\{'
     functions = re.findall(func_pattern, content)
@@ -141,7 +135,7 @@ def main():
         'example12d.fs',  # Part 3
     ]
     
-    print("GLSL Shader Validator")
+    print("🔍 GLSL Shader Validator")
     print("=" * 60)
     print("This checks syntax without requiring OpenGL libraries\n")
     
@@ -153,13 +147,13 @@ def main():
     
     print("=" * 60)
     if all_valid:
-        print("SUCCESS: All shaders passed validation!")
+        print("✅ All shaders passed validation!")
         print("\nNext steps:")
         print("  1. Install dependencies: brew install freeimage glfw glew")
         print("  2. Build: make or ./build.sh")
         print("  3. Test: ./example12 a b (for Part 1)")
     else:
-        print("ERROR: Some shaders have errors. Please fix them before building.")
+        print("❌ Some shaders have errors. Please fix them before building.")
     
     return 0 if all_valid else 1
 
