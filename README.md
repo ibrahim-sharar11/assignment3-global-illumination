@@ -137,15 +137,6 @@ done
 - Weighted average: `weightedSum / weightSum`
 - No visible seams (samples across cube map boundaries)
 
-## Validation
-
-Shader code has been validated using `validate_shaders.py`:
-- ✅ All shaders pass syntax validation
-- ✅ Implementation matches assignment requirements
-- ✅ Part 1: Reflection, refraction, and Schlick approximation implemented
-- ✅ Part 2a: Irradiance map sampling implemented
-- ✅ Part 2b: Monte Carlo sampling with 500 samples implemented
-
 ## Performance
 
 - **Part 1:** Real-time (60+ FPS)
@@ -154,6 +145,8 @@ Shader code has been validated using `validate_shaders.py`:
 
 To adjust sample count in Part 2b, edit `numSamples` in `example12d.fs`.
 
-## Author
+## Environment Map
 
-Academic project for CSCI 3090.
+The environment map is provided as `VancouverConventionCentre.zip`. Extract this file to create the `VancouverConventionCentre/` directory containing 6 cube map images (JPG format).
+
+For Part 2a, create the irradiance map by following the instructions in the "Creating Irradiance Map" section above.
