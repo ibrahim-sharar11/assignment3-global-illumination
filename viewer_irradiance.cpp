@@ -454,10 +454,10 @@ int main(int argc, char **argv) {
 	init();
 	background();
 
-	// Better initial camera position - looking at sphere from nice angle
-	r = 6.0;  // Slightly further back for better view
-	theta = M_PI / 3.5;  // ~51 degrees down from top - better angle
-	phi = M_PI / 4.0;    // 45 degrees around
+	// Initial camera position - looking at sphere with building visible
+	r = 5.0;
+	theta = 1.5;  // Original angle - shows building nicely
+	phi = 1.5;    // Original angle - good view of environment
 	
 	eyex = (float)(r * sin(theta) * cos(phi));
 	eyey = (float)(r * sin(theta) * sin(phi));
