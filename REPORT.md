@@ -1,7 +1,9 @@
 # Assignment 3 Report: Faking Global Illumination on the GPU
 
 **CSCI 3090**  
-**Student Name:** [ADD YOUR NAME]  
+**Student Name:** Ibrahim Sharar  
+**Student Number:** 100753058  
+**Email:** ibrahim.sharar@ontariotechu.net  
 **Date:** [ADD SUBMISSION DATE]
 
 ## Introduction
