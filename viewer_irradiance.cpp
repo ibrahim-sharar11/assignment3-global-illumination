@@ -18,6 +18,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform.hpp>
 #define _USE_MATH_DEFINES 
 #include <math.h>
 #include <stdio.h>
@@ -306,7 +307,7 @@ void display(void) {
 
 	view = glm::lookAt(glm::vec3(eyex, eyey, eyez),
 		glm::vec3(0.0f, 0.0f, 0.0f),
-		glm::vec3(0.0f, 0.0f, 1.0f));
+		glm::vec3(0.0f, 1.0f, 0.0f));
 
 	/*
 	 *  start by displaying the background cube
@@ -328,8 +329,12 @@ void display(void) {
 	/*
 	 *  now display the sphere
 	 */
+	// Create model matrix to scale sphere to nice size (2.0 units)
+	glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
+	glm::mat4 modelView = view * model;
+	
 	viewLoc = glGetUniformLocation(program, "modelView");
-	glUniformMatrix4fv(viewLoc, 1, 0, glm::value_ptr(view));
+	glUniformMatrix4fv(viewLoc, 1, 0, glm::value_ptr(modelView));
 	projLoc = glGetUniformLocation(program, "projection");
 	glUniformMatrix4fv(projLoc, 1, 0, glm::value_ptr(projection));
 
@@ -451,8 +456,8 @@ int main(int argc, char **argv) {
 	background();
 
 	// Better initial camera position - looking at sphere from nice angle
-	r = 5.0;
-	theta = M_PI / 3.0;  // 60 degrees down from top
+	r = 6.0;  // Slightly further back for better view
+	theta = M_PI / 3.5;  // ~51 degrees down from top - better angle
 	phi = M_PI / 4.0;    // 45 degrees around
 	
 	eyex = (float)(r * sin(theta) * cos(phi));
