@@ -55,12 +55,6 @@ void main() {
 	F = R0 + (1.0 - R0) * pow(1.0 - dot(V, N), 5.0);
 	
 	// Combine reflection and refraction using Fresnel factor
-	vec4 finalColor = mix(refrColor, reflColor, F);
-	
-	// Enhance glass effect - add slight tint and boost contrast
-	finalColor.rgb = pow(finalColor.rgb, vec3(0.9));  // Slight gamma correction for better contrast
-	finalColor.a = 0.95;  // Slight transparency for more realistic glass
-	
-	gl_FragColor = finalColor;
+	gl_FragColor = mix(refrColor, reflColor, F);
 }
 

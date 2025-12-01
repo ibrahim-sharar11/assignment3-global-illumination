@@ -135,7 +135,7 @@ def main():
         'example12d.fs',  # Part 3
     ]
     
-    print("🔍 GLSL Shader Validator")
+    print("GLSL Shader Validator")
     print("=" * 60)
     print("This checks syntax without requiring OpenGL libraries\n")
     
@@ -147,13 +147,13 @@ def main():
     
     print("=" * 60)
     if all_valid:
-        print("✅ All shaders passed validation!")
+        print("SUCCESS: All shaders passed validation!")
         print("\nNext steps:")
         print("  1. Install dependencies: brew install freeimage glfw glew")
         print("  2. Build: make or ./build.sh")
         print("  3. Test: ./example12 a b (for Part 1)")
     else:
-        print("❌ Some shaders have errors. Please fix them before building.")
+        print("ERROR: Some shaders have errors. Please fix them before building.")
     
     return 0 if all_valid else 1
 

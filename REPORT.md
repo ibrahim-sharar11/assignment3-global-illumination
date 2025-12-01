@@ -1,8 +1,8 @@
 # Assignment 3 Report: Faking Global Illumination on the GPU
 
 **CSCI 3090**  
-**Student Name:** [Your Name]  
-**Date:** [Submission Date]
+**Student Name:** [ADD YOUR NAME]  
+**Date:** [ADD SUBMISSION DATE]
 
 ## Introduction
 
