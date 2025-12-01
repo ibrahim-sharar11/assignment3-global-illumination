@@ -1,7 +1,8 @@
 # Assignment 3: Faking Global Illumination on the GPU
 
-**CSCI 3090**  
-**Due:** December 01, 2025
+**Course:** CSCI 3090  
+**Student:** Ibrahim Sharar (100753058)  
+**Due Date:** December 01, 2025
 
 ## Overview
 
@@ -78,13 +79,18 @@ Samples the environment map directly in the shader using ~500 random samples per
 
 ## Creating Irradiance Map (Part 2a)
 
-The irradiance map is a blurred version of the environment map:
+The irradiance map is a blurred version of the environment map. A script is provided to automate this process:
 
+```bash
+./create_irradiance_map.sh
+```
+
+This script will:
 1. Resize each cube map image from 2048x2048 to 512x512
-2. Apply a Gaussian blur (radius ~25-30 pixels)
+2. Apply a Gaussian blur (radius 25 pixels)
 3. Save to `VancouverConventionCentreIrradiance/` directory
 
-**Using ImageMagick:**
+**Manual method (using ImageMagick):**
 ```bash
 mkdir -p VancouverConventionCentreIrradiance
 for img in VancouverConventionCentre/*.jpg; do
@@ -92,6 +98,8 @@ for img in VancouverConventionCentre/*.jpg; do
         "VancouverConventionCentreIrradiance/$(basename $img)"
 done
 ```
+
+**Note:** Requires ImageMagick (`brew install imagemagick` on macOS, `apt-get install imagemagick` on Linux)
 
 ## Project Structure
 
@@ -121,7 +129,7 @@ done
 - Schlick's Fresnel approximation:
   ```glsl
   R0 = pow((1.0 - eta) / (1.0 + eta), 2.0)
-  F = R0 + (1.0 - R0) * pow(1.0 - dot(V, N), 5.0)
+  F = R0 + (1.0 - R0) * pow(1.0 - clamp(dot(-V, N), 0.0, 1.0), 5.0)
   ```
 - Blends reflection and refraction: `mix(refrColor, reflColor, F)`
 
@@ -132,7 +140,7 @@ done
 
 ### Part 2b: Monte Carlo Sampling
 - Random number generator (LCG) initialized per pixel
-- Cosine-weighted hemisphere sampling
+- Uniform hemisphere sampling with cosine weighting applied in the average
 - **500 samples per pixel**
 - Weighted average: `weightedSum / weightSum`
 - No visible seams (samples across cube map boundaries)
@@ -147,6 +155,11 @@ To adjust sample count in Part 2b, edit `numSamples` in `example12d.fs`.
 
 ## Environment Map
 
-The environment map is provided as `VancouverConventionCentre.zip`. Extract this file to create the `VancouverConventionCentre/` directory containing 6 cube map images (JPG format).
+The environment map is provided in the `VancouverConventionCentre/` directory containing 6 cube map images (JPG format):
+- `posx.jpg`, `negx.jpg` (right, left)
+- `posy.jpg`, `negy.jpg` (top, bottom)
+- `posz.jpg`, `negz.jpg` (front, back)
 
-For Part 2a, create the irradiance map by following the instructions in the "Creating Irradiance Map" section above.
+**Note:** The environment map is provided by Emil Persson (Humus) under Creative Commons Attribution 3.0 License.
+
+For Part 2a, create the irradiance map by running `./create_irradiance_map.sh` or following the manual instructions above.

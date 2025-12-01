@@ -1,5 +1,6 @@
 /*
- *  Simple vertex shader for Example 10
+ *  Vertex shader for Assignment 3
+ *  Passes position, normal, and texture coordinates to fragment shader
  */
 
 #version 330 core

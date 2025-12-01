@@ -14,6 +14,8 @@ uniform vec3 Eye;
 uniform vec3 light;
 uniform vec4 material;
 
+out vec4 fragColor;
+
 void main() {
 	vec3 V;           // View direction (from surface to eye)
 	vec3 N;           // Normalized normal
@@ -24,6 +26,7 @@ void main() {
 	float F;          // Schlick's Fresnel factor
 	vec4 reflColor;   // Reflected color
 	vec4 refrColor;   // Refracted color
+	float cosTheta;   // Cosine of incident angle (for Fresnel)
 	
 	// Normalize inputs
 	V = normalize(Eye - position);
@@ -42,7 +45,7 @@ void main() {
 	// If total internal reflection occurred, T will be (0,0,0)
 	// In that case, use reflection only
 	if (length(T) < 0.01) {
-		gl_FragColor = texture(tex, R);
+		fragColor = texture(tex, R);
 		return;
 	}
 	
@@ -51,10 +54,10 @@ void main() {
 	refrColor = texture(tex, T);
 	
 	// Schlick's approximation for Fresnel reflection
+	cosTheta = clamp(dot(-V, N), 0.0, 1.0); // use incident vector (-V)
 	R0 = pow((1.0 - eta) / (1.0 + eta), 2.0);
-	F = R0 + (1.0 - R0) * pow(1.0 - dot(V, N), 5.0);
+	F = R0 + (1.0 - R0) * pow(1.0 - cosTheta, 5.0);
 	
 	// Combine reflection and refraction using Fresnel factor
-	gl_FragColor = mix(refrColor, reflColor, F);
+	fragColor = mix(refrColor, reflColor, F);
 }
-

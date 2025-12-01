@@ -1,9 +1,10 @@
 /************************************************************
 *
-*                   Example 12 with Irradiance Map Support
-*                   Modified for Assignment 3 - Part 2
+*                   Assignment 3 - Global Illumination
+*                   Part 2a: Irradiance Map Viewer
 *
-*  This loads both an environment map and an irradiance map
+*  Viewer application for Part 2a that loads both an
+*  environment map and an irradiance map for diffuse reflection
 *
 *********************************************************/
 #define GLM_FORCE_RADIANS
@@ -401,6 +402,14 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "can't initialize GLFW\n");
 	}
 
+	// Request a 3.3 core context to match the shaders
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
 	window = glfwCreateWindow(512, 512, "Example Twelve", NULL, NULL);
 
 	if (!window)
@@ -470,4 +479,3 @@ int main(int argc, char **argv) {
 	glfwTerminate();
 
 }
-

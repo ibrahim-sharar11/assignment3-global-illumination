@@ -1,5 +1,6 @@
 /*
- *  Simple fragment sharder for Example 10
+ *  Fragment shader for Example 12 (base implementation)
+ *  Simple reflection using environment map
  */
 
 #version 330 core
@@ -13,10 +14,12 @@ uniform vec3 Eye;
 uniform vec3 light;
 uniform vec4 material;
 
+out vec4 fragColor;
+
 void main() {
 	vec3 tc;
 	
 	tc = reflect(position - Eye, normal);
-	gl_FragColor = texture(tex,tc);
+	fragColor = texture(tex,tc);
 
 }

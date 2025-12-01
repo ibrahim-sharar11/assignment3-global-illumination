@@ -31,11 +31,11 @@ COMMON_OBJECTS := $(COMMON_OBJECTS:.cc=.o)
 # Targets
 all: example12 example12_irradiance
 
-# Main viewer (for Part 1 and Part 3)
+# Main viewer (for Part 1 and Part 2b)
 example12: viewer.o $(COMMON_OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 
-# Irradiance viewer (for Part 2)
+# Irradiance viewer (for Part 2a)
 example12_irradiance: viewer_irradiance.o $(COMMON_OBJECTS)
 	$(CXX) -o $@ $^ $(LDFLAGS) $(LIBS)
 

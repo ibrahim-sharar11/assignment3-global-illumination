@@ -48,19 +48,15 @@ The implementation produces a glass-like sphere that shows both reflection and r
 
 This approach uses a pre-blurred environment map (irradiance map) to simulate diffuse reflection. The implementation:
 
-1. Uses a blurred version of the environment map (resized from 2048x2048 to 512x512 and blurred)
+1. Uses a blurred version of the environment map (resized from 2048x2048 to ~512x512 and blurred)
 2. Samples the irradiance map using the surface normal vector directly
-3. The shader (`example12c.fs`) blends the irradiance map with a subtle specular reflection component:
-   - Primary diffuse: samples `irradianceMap` using the normal vector
-   - Subtle reflection: samples the environment map using the reflection vector
-   - Fresnel blending: mixes between diffuse and reflection based on viewing angle
-   - Enhanced with tone mapping, gamma correction, and brightness/contrast adjustments
+3. Keeps the shader (`example12c.fs`) intentionally minimal: no extra specular or tone mapping, just a clamped irradiance lookup for a clean diffuse result
 
 #### Results
 
 ![Part 2a: Irradiance Maps](part2a_screenshot.png)
 
-This approach produces a soft, diffuse appearance with enhanced visual quality through subtle specular reflection blending. The sphere demonstrates smooth diffuse lighting from the irradiance map, with polished reflections visible at glancing angles. However, seams between cube map faces may be visible due to the blurring being applied to individual images rather than across boundaries.
+This approach produces a soft, diffuse appearance without sharp reflections. Seams between cube map faces may be visible because the blur is applied per-face rather than across edges.
 
 ### Part 2b: Monte Carlo Sampling (50%)
 
@@ -70,18 +66,19 @@ This approach solves the seam problem by sampling the environment map directly i
 
 1. **Random Number Generator**: Uses a linear congruential generator (LCG) provided in the assignment:
    - Parameters: `a=141, c=28411, m=134456`
-   - Initialized per pixel based on the normal vector in the `main()` function
+   - Initialized per pixel based on `gl_FragCoord` in the `main()` function for decorrelated seeds
 
 2. **Hemisphere Sampling**: 
-   - Generates random directions in the hemisphere above the surface
-   - Uses cosine-weighted sampling for better distribution
-   - Ensures each sample has a positive dot product with the normal
+   - Uses rejection sampling: generates random vectors uniformly in a sphere and keeps only those with positive dot product with the normal
+   - This ensures uniform distribution on the hemisphere above the surface
+   - Each sample is weighted by the cosine of the angle (dot product with normal)
 
 3. **Weighted Averaging**:
-   - Each sample is weighted by the cosine of the angle (dot product with normal)
-   - Final color = weighted sum / sum of weights
+   - Uniform hemisphere sampling; each sample is weighted by the cosine of the angle (dot product with normal)
+   - Final color = weighted sum / sum of weights (avoids over-darkening from double cosine weighting)
 
 4. **Sample Count**: Uses **500 samples** per pixel to achieve reasonable image quality
+5. **Seeding**: RNG seed is based on `gl_FragCoord` to avoid repeating patterns across pixels
 
 #### Key Code
 

@@ -1,5 +1,6 @@
 /*
- *  Simple vertex shader for lab 4
+ *  Vertex shader for background cube
+ *  Transforms cube vertices for environment map display
  */
 
 #version 330 core

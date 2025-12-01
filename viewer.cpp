@@ -1,11 +1,12 @@
 /************************************************************
 *
-*                   Example 12
+*                   Assignment 3 - Global Illumination
 *
-*  This is an example of environment maps used both a a
-*  background and to simulate specular reflection in
-*  the fragement shader.  The result is a shiny sphere
-*  outside the Vancouver Convention Centre
+*  Main viewer application for Parts 1 and 2b
+*  - Part 1: Reflection and Refraction with Schlick approximation
+*  - Part 2b: Monte Carlo sampling for diffuse reflection
+*
+*  Based on Example 12 from course materials
 *
 *********************************************************/
 #define GLM_FORCE_RADIANS
@@ -312,6 +313,14 @@ void display(void) {
 	materialLoc = glGetUniformLocation(program, "material");
 	glUniform4f(materialLoc, 0.3, 0.7, 0.7, 150.0);
 	
+	// Bind environment map texture for sphere shader
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envMap);
+	int texLoc = glGetUniformLocation(program, "tex");
+	if (texLoc != -1) {
+		glUniform1i(texLoc, 0);
+	}
+	
 	glBindVertexArray(objVAO);
 	glDrawElements(GL_TRIANGLES, 3*triangles, GL_UNSIGNED_INT, NULL);
 }
@@ -356,6 +365,14 @@ int main(int argc, char **argv) {
 	if (!glfwInit()) {
 		fprintf(stderr, "can't initialize GLFW\n");
 	}
+
+	// Request a 3.3 core context to match the shaders
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef __APPLE__
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
 	window = glfwCreateWindow(512, 512, "Example Twelve", NULL, NULL);
 
