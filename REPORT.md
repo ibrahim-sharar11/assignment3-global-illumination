@@ -6,7 +6,7 @@
 
 ## Introduction
 
-This report describes the implementation of techniques for faking global illumination effects in real-time using GPU shaders. The assignment consists of two main parts: (1) Reflection and Refraction with Schlick approximation, and (2) Diffuse Reflection using two different approaches.
+This report describes the implementation of techniques for faking global illumination effects in real-time using GPU shaders. The assignment consists of two main parts: (1) Reflection and Refraction with Schlick approximation (50%), and (2) Diffuse Reflection using two different approaches (50%).
 
 ## Part 1: Reflection and Refraction (50%)
 
@@ -25,7 +25,7 @@ The fragment shader (`example12b.fs`) implements the following:
 1. Compute reflection vector: `R = reflect(-V, N)`
 2. Compute refraction vector: `T = refract(-V, N, eta)` where `eta = 1.0 / 1.5`
 3. Calculate Fresnel factor using Schlick's approximation:
-   ```
+   ```glsl
    R0 = pow((1.0 - eta) / (1.0 + eta), 2.0)
    F = R0 + (1.0 - R0) * pow(1.0 - dot(V, N), 5.0)
    ```
@@ -34,7 +34,7 @@ The fragment shader (`example12b.fs`) implements the following:
 
 ### Results
 
-*[Screenshot of Part 1: Glass sphere with reflection and refraction - Add your screenshot here]*
+*[Insert screenshot/image of Part 1 here]*
 
 The implementation produces a glass-like sphere that shows both reflection and refraction. The Fresnel effect is visible: more reflection occurs at glancing angles, while more refraction occurs when viewing perpendicular to the surface.
 
@@ -52,7 +52,7 @@ This approach uses a pre-blurred environment map (irradiance map) to simulate di
 
 #### Results
 
-*[Screenshot of Part 2a: Diffuse sphere using irradiance map - Add your screenshot here]*
+*[Insert screenshot/image of Part 2a here]*
 
 This approach produces a soft, diffuse appearance. However, seams between cube map faces may be visible due to the blurring being applied to individual images rather than across boundaries.
 
@@ -64,7 +64,7 @@ This approach solves the seam problem by sampling the environment map directly i
 
 1. **Random Number Generator**: Uses a linear congruential generator (LCG) provided in the assignment:
    - Parameters: `a=141, c=28411, m=134456`
-   - Initialized per pixel based on the normal vector
+   - Initialized per pixel based on the normal vector in the `main()` function
 
 2. **Hemisphere Sampling**: 
    - Generates random directions in the hemisphere above the surface
@@ -75,19 +75,19 @@ This approach solves the seam problem by sampling the environment map directly i
    - Each sample is weighted by the cosine of the angle (dot product with normal)
    - Final color = weighted sum / sum of weights
 
-4. **Sample Count**: Uses approximately **500 samples** per pixel to achieve reasonable image quality
+4. **Sample Count**: Uses **500 samples** per pixel to achieve reasonable image quality
 
 #### Key Code
 
 The fragment shader (`example12d.fs`) implements:
-- Random number generator initialized in `main()`
-- Cosine-weighted hemisphere sampling
+- Random number generator initialized in `main()` function
+- Cosine-weighted hemisphere sampling function
 - Loop over 500 samples, accumulating weighted colors
-- Final division by sum of weights
+- Final division by sum of weights: `gl_FragColor = weightedSum / weightSum`
 
 #### Results
 
-*[Screenshot of Part 2b: Smooth diffuse sphere using Monte Carlo sampling - Add your screenshot here]*
+*[Insert screenshot/image of Part 2b here]*
 
 This approach produces a smooth, diffuse appearance without visible seams. The quality improves with more samples, but performance decreases. With 500 samples, the image quality is good, though rendering is slower than the irradiance map approach.
 
@@ -114,7 +114,7 @@ make                    # Builds both executables
 - FreeImage library
 - GLFW library
 - GLEW library
-- Environment map: `VancouverConventionCentre/` directory
+- Environment map: `VancouverConventionCentre/` directory with 6 cube map images
 
 ### File Structure
 
@@ -144,4 +144,3 @@ The implementations demonstrate different trade-offs between quality, performanc
 - Assignment 3 Description (ASSIGNMENT_THREE.md)
 - GLSL Documentation for `reflect()` and `refract()` functions
 - Schlick's Fresnel Approximation
-
